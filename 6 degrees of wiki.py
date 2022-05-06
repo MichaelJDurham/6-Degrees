@@ -1,8 +1,10 @@
 from urllib.request import urlopen
 from urllib.error import HTTPError
 from bs4 import BeautifulSoup
+import re
 html = urlopen('http://en.wikipedia.org/wiki/Kevin_Bacon')
-bs4 = BeautifulSoup(html.read(), "html.parser")
-for link in bs4.find_all('a'):
+bs = BeautifulSoup(html, 'html.parser')
+for link in bs.find('div', {'id':'bodyContent'}).find_all(
+'a', href=re.compile('^(/wiki/)((?!:).)*$')):
     if 'href' in link.attrs:
         print(link.attrs['href'])
